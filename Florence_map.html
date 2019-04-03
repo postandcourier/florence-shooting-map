@@ -54,13 +54,43 @@
     border-bottom: none;
     margin-bottom: 600px;
   }
+  
+  .red-text {
+    color: #F15062;
+    font-weight: bold;
+  }
+  
+  .blue-text {
+    color: #1D8ACB;
+    font-weight: bold;
+  }
+  
+  .orange-text {
+    color: #F2734F;
+    font-weight: bold;
+  }
+
+  .green-text {
+    color: #82C566;
+    font-weight: bold;
+  }
+
+  .teal-text {
+    color: #1CAECC;
+    font-weight: bold;
+  }
+
+  .yellow-text {
+    background-color: #F0DD67;
+    font-weight: bold;
+  }
 </style>
 
 <div id='map'></div>
 <div id='features'>
   <section id='chapter1' class='active'>
     <!--         <h3>Chapter 1</h3>
-     --> <p>Frederick Hopkins is at home with his son, Seth, when investigators arrive.
+     --> <p><span class="orange-text">Frederick Hopkins</span> is at home with his son, Seth, when investigators arrive.
     They’ve come to talk to Seth about sexual assault allegations and to serve a search warrant.
     Three of the Hopkins’ other children, an adult and two teens, are inside as well.
   </p>
@@ -68,29 +98,30 @@
   <section id='chapter2'>
     <!--         <h3>Chapter 2</h3>
      --> <p>Five Florence County sheriff’s personnel arrive at the house and park.
-    From inside, a gunman shoots investigator Farrah Turner as she walks up the front porch.
-    The shooter then hits investigator Sarah Miller and forensics deputy Arie Davis, who use police vehicles for cover.
+    From inside, a gunman shoots investigator <span class="blue-text">Farrah Turner</span> as she walks up the front porch.
+    The shooter then hits investigator <span class="blue-text">Sarah Miller</span> and forensics deputy <span class="blue-text">Arie Davis</span>, who use police vehicles for cover.
   </p>
   </section>
   <section id='chapter3'>
     <!--         <h3>Chapter 3</h3>
      --> <p>Florence city police respond to help.
-    Sgt. Terrence Carraway drives down Ashton Drive, parks about 500 feet away and gets out. A bullet strikes him just
+    <span class="red-text">Sgt. Terrence Carraway</span> drives down Ashton Drive, parks about 500 feet away and gets out. A bullet strikes him just
     above his bullet-proof vest.
-    Sgt. Scott Williamson responds close behind him. A bullet strikes him in the head as he drives. He veers off the
+    <span class="green-text">Sgt. Scott Williamson</span> responds close behind him. A bullet strikes him in the head as he
+    drives. He veers off the
     road and crashes into a house.
   </p>
   </section>
   <section id='chapter4'>
     <!--         <h3>Chapter 4</h3>
      --> <p>Florence County Sheriff Kenney Boone lives in the neighborhood. Boone, who is at home, hears the shooting.
-    He takes a back street to avoid Ashton and sets up a staging area nearby.
+    He takes a back street to avoid Ashton and sets up a <span class="yellow-text">staging area</span> nearby.
     But he cannot reach the fallen officers as gunfire continues.
   </p>
   </section>
   <section id='chapter5'>
     <!--         <h3>Chapter 5</h3>
-     --> <p>Florence police officers Travis Scott and Brian Hart are shot several blocks up Ashton Drive from the cul de
+     --> <p>Florence police officers <span class="teal-text">Travis Scott</span> and <span class="teal-text">Brian Hart</span> are shot several blocks up Ashton Drive from the cul de
     sac.
     Bullets fly as far as six blocks away.
   </p>
@@ -177,7 +208,7 @@
         "line-cap": "round"
       },
       "paint": {
-        "line-color": "#F15062",
+        "line-color": { "type": "identity", "property": "lineColor" },
         "line-width": 5,
         "line-opacity": 1
       }
