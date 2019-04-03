@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'/>
+  <title>Fly to a location based on scroll position</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+
+<style>
+  #map {
+    position: fixed;
+    width: 60%;
+  }
+
+  #features {
+    width: 40%;
+    margin-left: 60%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #f3f4f2;
+  }
+
+  section {
+    padding: 25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+    margin-bottom: 6rem;
+  }
+
+  section.active {
+    opacity: 1;
+  }
+
+  section:last-child {
+    border-bottom: none;
+    margin-bottom: 600px;
+  }
+</style>
+
+<div id='map'></div>
+<div id='features'>
+  <section id='chapter1' class='active'>
+    <!--         <h3>Chapter 1</h3>
+     --> <p>Frederick Hopkins is at home with his son, Seth, when investigators arrive.
+    They’ve come to talk to Seth about sexual assault allegations and to serve a search warrant.
+    Three of the Hopkins’ other children, an adult and two teens, are inside as well.
+  </p>
+  </section>
+  <section id='chapter2'>
+    <!--         <h3>Chapter 2</h3>
+     --> <p>Five Florence County sheriff’s personnel arrive at the house and park.
+    From inside, a gunman shoots investigator Farrah Turner as she walks up the front porch.
+    The shooter then hits investigator Sarah Miller and forensics deputy Arie Davis, who use police vehicles for cover.
+  </p>
+  </section>
+  <section id='chapter3'>
+    <!--         <h3>Chapter 3</h3>
+     --> <p>Florence city police respond to help.
+    Sgt. Terrence Carraway drives down Ashton Drive, parks about 500 feet away and gets out. A bullet strikes him just
+    above his bullet-proof vest.
+    Sgt. Scott Williamson responds close behind him. A bullet strikes him in the head as he drives. He veers off the
+    road and crashes into a house.
+  </p>
+  </section>
+  <section id='chapter4'>
+    <!--         <h3>Chapter 4</h3>
+     --> <p>Florence County Sheriff Kenney Boone lives in the neighborhood. Boone, who is at home, hears the shooting.
+    He takes a back street to avoid Ashton and sets up a staging area nearby.
+    But he cannot reach the fallen officers as gunfire continues.
+  </p>
+  </section>
+  <section id='chapter5'>
+    <!--         <h3>Chapter 5</h3>
+     --> <p>Florence police officers Travis Scott and Brian Hart are shot several blocks up Ashton Drive from the cul de
+    sac.
+    Bullets fly as far as six blocks away.
+  </p>
+  </section>
+</div>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoicG9zdGFuZGNvdXJpZXIiLCJhIjoiLTJtdV9XQSJ9.jbQWsbAO9LktxtEBDHcl3Q';
+
+  var map = new mapboxgl.Map( {
+    container: 'map',
+    style: 'mapbox://styles/postandcourier/cjtzuif3450lw1fq5q42hacze',
+    center: [ -79.8475189037789, 34.22124633319073 ],
+    zoom: 17.1,
+    bearing: -88.80000000000047,
+    pitch: 36.49999999999999,
+    speed: 0.5,
+    curve: 0.2
+  } );
+
+  var chapters = {
+    'chapter1': {
+      center: [ -79.8475189037789, 34.22124633319073 ],
+      zoom: 17.3,
+      bearing: -88.80000000000047,
+      pitch: 36.49999999999999,
+      speed: 0.5,
+      curve: 0.2
+    },
+    'chapter2': {
+      center: [ -79.8475189037789, 34.22124633319073 ],
+      zoom: 17.4,
+      bearing: -88.80000000000047,
+      pitch: 36.49999999999999,
+      speed: 0.3,
+      curve: 0.2
+
+    },
+    'chapter3': {
+      center: [ -79.8474189037789, 34.22010633319073 ],
+      zoom: 17.5,
+      bearing: -1,
+      pitch: 36.49999999999999,
+      speed: .2,
+      curve: 0.2
+    },
+
+    'chapter4': {
+      center: [ -79.84828050445147, 34.21956243865015 ],
+      zoom: 17.5,
+      bearing: 90,
+      speed: .03,
+      curve: 0.2
+    },
+
+    'chapter5': {
+      center: [ -79.84752254290427, 34.218896367662595 ],
+      zoom: 17.179551164990766,
+      bearing: -18.399999999998954,
+      pitch: 60,
+
+      speed: 0.7,
+      curve: 0.2,
+
+    }
+
+  };
+
+  // functions to run on map load
+  map.on( 'load', function () {
+
+    // add layer with points and lines for animation
+    map.addSource( 'annotations', {
+      type: 'vector',
+      url: 'mapbox://postandcourier.cjtyou6lj0v772wo4fwobig06-6endb'
+    } );
+
+    map.addLayer( {
+      "id": "annotation-lines",
+      "type": "line",
+      "source": "annotations",
+      "source-layer": "pc-040719-ne-florenceshooting",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#F15062",
+        "line-width": 5,
+        "line-opacity": 1
+      }
+    } );
+
+    map.addLayer( {
+      "id": "annotation-symbols",
+      "type": "symbol",
+      "source": "annotations",
+      "source-layer": "pc-040719-ne-florenceshooting",
+      "layout": {
+        "icon-image": "{icon}",
+        "icon-size": 2,
+        "icon-allow-overlap": true
+      },
+      "filter": ["==", "$type", "Point"]
+    } );
+
+    // hide every symbol except slide 1
+    map.setFilter('annotation-symbols',  ['==', 'slide', 'slide1']);
+    map.setFilter('annotation-lines',  ['==', 'slide', 'slide1']);
+
+  } );
+
+  // On every scroll event, check which element is on screen
+  window.onscroll = function () {
+    var chapterNames = Object.keys( chapters );
+    for ( var i = 0; i < chapterNames.length; i++ ) {
+      var chapterName = chapterNames[ i ];
+      if ( isElementOnScreen( chapterName ) ) {
+        setActiveChapter( chapterName );
+        break;
+      }
+    }
+  };
+
+  var activeChapterName = 'chapter1';
+
+
+  function setActiveChapter( chapterName ) {
+    if ( chapterName === activeChapterName ) return;
+
+    if ( chapterName === 'chapter1' ) {
+      map.setFilter('annotation-symbols', [
+        "any",
+        ['==', 'slide', 'slide1'],
+      ]);
+      map.setFilter('annotation-lines', [
+        "any",
+        ['==', 'slide', 'slide1'],
+      ]);
+    }
+
+    if ( chapterName === 'chapter2' ) {
+      map.setFilter('annotation-symbols', [
+        "any",
+        ['==', 'slide', 'slide1'],
+        ['==', 'slide', 'slide2'],
+      ]);
+      map.setFilter('annotation-lines', [
+        "any",
+        ['==', 'slide', 'slide2'],
+      ]);
+    }
+
+    if ( chapterName === 'chapter3' ) {
+      map.setFilter('annotation-symbols', [
+        "any",
+        ['==', 'slide', 'slide1'],
+        ['==', 'slide', 'slide2'],
+        ['==', 'slide', 'slide3'],
+      ]);
+      map.setFilter('annotation-lines', [
+        "any",
+        ['==', 'slide', 'slide3'],
+      ]);
+    }
+
+    if ( chapterName === 'chapter4' ) {
+      map.setFilter('annotation-symbols', [
+        "any",
+        ['==', 'slide', 'slide1'],
+        ['==', 'slide', 'slide2'],
+        ['==', 'slide', 'slide3'],
+        ['==', 'slide', 'slide4'],
+      ]);
+      map.setFilter('annotation-lines', [
+        "any",
+        ['==', 'slide', 'slide4'],
+      ]);
+    }
+
+    if ( chapterName === 'chapter5' ) {
+      map.setFilter('annotation-symbols', [
+        "any",
+        ['==', 'slide', 'slide1'],
+        ['==', 'slide', 'slide2'],
+        ['==', 'slide', 'slide3'],
+        ['==', 'slide', 'slide4'],
+        ['==', 'slide', 'slide5'],
+      ]);
+      map.setFilter('annotation-lines', [
+        "any",
+        ['==', 'slide', 'slide5'],
+      ]);
+    }
+
+    map.flyTo( chapters[ chapterName ] );
+
+    document.getElementById( chapterName ).setAttribute( 'class', 'active' );
+    document.getElementById( activeChapterName ).setAttribute( 'class', '' );
+
+    activeChapterName = chapterName;
+  }
+
+  function isElementOnScreen( id ) {
+    var element = document.getElementById( id );
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+  }
+
+</script>
+
+</body>
+</html>
