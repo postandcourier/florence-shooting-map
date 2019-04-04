@@ -54,7 +54,9 @@
   }
 
   #tap_to_start > img {
-    max-width: 50%;
+    margin-top: 20vh;
+    max-width: 60%;
+    max-height:  80%;
   }
 
   #tap_collector{
@@ -103,17 +105,18 @@
   #features {
     width: 100%;
     font-family: sans-serif;
-    background-color: rgba(243,244,242, 0.9);
+    background-color: rgba(243,244,242, 0.95);
     position: absolute;
     z-index: 2;
   }
 
   section {
-    padding: 0.8rem 1.6rem;
+    padding: 0.2rem 1rem;
     line-height: 20px;
     opacity: 0.25;
-    font-size: 12px;
+    font-size: 13px;
     font-family: adelle-sans, sans-serif;
+    color: #2F3531;
   }
 
   section.active {
@@ -126,27 +129,32 @@
   }
 
   .red-text {
-    color: #F15062;
+    color: #f3f4f2;
+    background-color: #F15062;
     font-weight: bold;
   }
 
   .blue-text {
-    color: #1D8ACB;
+    color: #f3f4f2;
+    background-color: #1D8ACB;
     font-weight: bold;
   }
 
   .orange-text {
-    color: #F2734F;
+    color: #f3f4f2;
+    background-color: #F2734F;
     font-weight: bold;
   }
 
   .green-text {
-    color: #82C566;
+    color: #f3f4f2;
+    background-color: #82C566;
     font-weight: bold;
   }
 
   .teal-text {
-    color: #1CAECC;
+    color: #f3f4f2;
+    background-color: #1CAECC;
     font-weight: bold;
   }
 
@@ -235,9 +243,9 @@
     container: 'map',
     style: 'mapbox://styles/postandcourier/cjtzuif3450lw1fq5q42hacze',
     center: [ -79.8475189037789, 34.22124633319073 ],
-    zoom: 17.1,
+    zoom: 16.5,
     bearing: -88.80000000000047,
-    pitch: 36.49999999999999,
+    pitch: 0,
     speed: 0.5,
     curve: 0.2
   } );
@@ -245,7 +253,7 @@
   var chapters = {
     'chapter1': {
       center: [ -79.8475189037789, 34.22124633319073 ],
-      zoom: 17.3,
+      zoom: 18.4,
       bearing: -88.80000000000047,
       pitch: 36.49999999999999,
       speed: 0.5,
@@ -253,8 +261,8 @@
     },
     'chapter2': {
       center: [ -79.8475189037789, 34.22124633319073 ],
-      zoom: 17.4,
-      bearing: -88.80000000000047,
+      zoom: 17.8,
+      bearing: -110,
       pitch: 36.49999999999999,
       speed: 0.3,
       curve: 0.2
@@ -264,16 +272,16 @@
       center: [ -79.8474189037789, 34.22010633319073 ],
       zoom: 17,
       bearing: -1,
-      pitch: 36.49999999999999,
+      pitch: 60,
       speed: .2,
       curve: 0.2
     },
 
     'chapter4': {
       center: [ -79.8477060674038,34.21947018671703 ],
-      zoom: 17.4,
-      bearing: 90,
-      pitch: 55,
+      zoom: 17.8,
+      bearing: 80,
+      pitch: 45,
       speed: .2,
       curve: 0.2
     },
@@ -282,7 +290,7 @@
       center: [ -79.84752254290427, 34.218896367662595 ],
       zoom: 17.179551164990766,
       bearing: -18.399999999998954,
-      pitch: 60,
+      pitch: 70,
 
       speed: 0.4,
       curve: 0.2,
@@ -323,8 +331,11 @@
       "source-layer": "pc-040719-ne-florenceshooting",
       "layout": {
         "icon-image": "{icon}",
-        "icon-size": 2,
-        "icon-allow-overlap": true
+        "icon-size": 1.6,
+        "icon-allow-overlap": true,
+        "icon-rotation-alignment": "viewport",
+        "icon-keep-upright": true,
+        "icon-anchor": "bottom"
       },
       "filter": [ "==", "$type", "Point" ]
     } );
@@ -347,6 +358,7 @@
 
   // listen for a click on the start screen
   tapToStartElement.addEventListener('click', function( e ) {
+    map.flyTo( chapters[ 'chapter1' ] );
     tapToStartElement.setAttribute('class', 'hidden');
     tapCollectorElement.setAttribute('class', 'active');
 
@@ -427,6 +439,7 @@
       ] );
       map.setFilter( 'annotation-lines', [
         "any",
+        [ '==', 'slide', 'slide3' ],
         [ '==', 'slide', 'slide4' ],
       ] );
     }
