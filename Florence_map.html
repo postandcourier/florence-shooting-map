@@ -6,13 +6,20 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet'/>
+  <link rel="stylesheet" href="https://use.typekit.net/hro3igp.css">
 </head>
 <body>
 
 
 <style>
 
-  #map-container{
+  html, body {
+    padding: 0;
+    margin: 0;
+    font-family: adelle-sans, sans-serif;
+  }
+
+  #map-container {
     width: 100%;
     min-height: 400px;
     height: 500px;
@@ -23,37 +30,99 @@
     top: 0;
     bottom: 0;
     width: 100%;
+    pointer-events: none;
   }
 
   #map {
-    position: fixed;
-    width: 60%;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #tap_to_start {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    transition: all 0.3s;
+    opacity: 1;
+  }
+
+  #tap_to_start > img {
+    max-width: 50%;
+  }
+
+  #tap_collector{
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0);
+  }
+
+  #tap_collector.active {
+    z-index: 4;
+  }
+
+  #tap_to_start.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #tap_to_restart {
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    background-color: rgba(0,0,0,0.9);
+    padding: 2rem 0;
+    pointer-events:  none;
+    opacity: 0;
+    transition: all 0.3s;
+    color: #f4f3f2;
+  }
+
+  #tap_to_restart.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
   #features {
-    width: 40%;
-    margin-left: 60%;
+    width: 100%;
     font-family: sans-serif;
-    overflow-y: scroll;
-    background-color: #f3f4f2;
+    background-color: rgba(243,244,242, 0.9);
+    position: absolute;
+    z-index: 2;
   }
 
   section {
-    padding: 25px 50px;
-    line-height: 25px;
-    border-bottom: 1px solid #ddd;
+    padding: 0.8rem 1.6rem;
+    line-height: 20px;
     opacity: 0.25;
-    font-size: 13px;
-    margin-bottom: 6rem;
+    font-size: 12px;
+    font-family: adelle-sans, sans-serif;
   }
 
   section.active {
     opacity: 1;
   }
 
-  section:last-child {
-    border-bottom: none;
-    margin-bottom: 600px;
+  .continue {
+    font-style: italic;
+    opacity: 0.8;
   }
 
   .red-text {
@@ -85,16 +154,30 @@
     background-color: #F0DD67;
     font-weight: bold;
   }
+
+  #features section {
+    display: none;
+  }
+
+  #features section.active {
+    display: block;
+  }
 </style>
 
 <div id="map-container">
   <div id='map'></div>
+  <div id="tap_to_start">
+    <img src='tap.png' alt='tap to start'>
+  </div>
   <div id='features'>
     <section id='chapter1' class='active'>
       <!--         <h3>Chapter 1</h3>
-       --> <p><span class="orange-text">Frederick Hopkins</span> is at home with his son, Seth, when investigators arrive.
+       --> <p><span class="orange-text">Frederick Hopkins</span> is at home with his son, Seth, when investigators
+      arrive.
       They’ve come to talk to Seth about sexual assault allegations and to serve a search warrant.
-      Three of the Hopkins’ other children, an adult and two teens, are inside as well.
+      Three of the Hopkins’ other children, an adult and two teens, are inside as well.  <span class="continue">Click
+        or tap to continue...</span>
+      </span>
     </p>
     </section>
     <section id='chapter2'>
@@ -103,7 +186,8 @@
       From inside, a gunman shoots investigator <span class="blue-text">Farrah Turner</span> as she walks up the front
       porch.
       The shooter then hits investigator <span class="blue-text">Sarah Miller</span> and forensics deputy
-      <span class="blue-text">Arie Davis</span>, who use police vehicles for cover.
+      <span class="blue-text">Arie Davis</span>, who use police vehicles for cover. <span class="continue">Click
+        or tap to continue...</span>
     </p>
     </section>
     <section id='chapter3'>
@@ -115,14 +199,16 @@
       <span class="green-text">Sgt. Scott Williamson</span> responds close behind him. A bullet strikes him in the head
       as he
       drives. He veers off the
-      road and crashes into a house.
+      road and crashes into a house. <span class="continue">Click
+        or tap to continue...</span>
     </p>
     </section>
     <section id='chapter4'>
       <!--         <h3>Chapter 4</h3>
        --> <p>Florence County Sheriff Kenney Boone lives in the neighborhood. Boone, who is at home, hears the shooting.
       He takes a back street to avoid Ashton and sets up a <span class="yellow-text">staging area</span> nearby.
-      But he cannot reach the fallen officers as gunfire continues.
+      But he cannot reach the fallen officers as gunfire continues. <span class="continue">Click
+        or tap to continue...</span>
     </p>
     </section>
     <section id='chapter5'>
@@ -133,6 +219,12 @@
       Bullets fly as far as six blocks away.
     </p>
     </section>
+  </div>
+
+  <div id="tap_collector"></div>
+
+  <div id="tap_to_restart">
+    <div class="button">Click or tap to restart</div>
   </div>
 </div>
 
@@ -170,7 +262,7 @@
     },
     'chapter3': {
       center: [ -79.8474189037789, 34.22010633319073 ],
-      zoom: 17.5,
+      zoom: 17,
       bearing: -1,
       pitch: 36.49999999999999,
       speed: .2,
@@ -178,10 +270,11 @@
     },
 
     'chapter4': {
-      center: [ -79.84828050445147, 34.21956243865015 ],
-      zoom: 17.5,
+      center: [ -79.8477060674038,34.21947018671703 ],
+      zoom: 17.4,
       bearing: 90,
-      speed: .03,
+      pitch: 55,
+      speed: .2,
       curve: 0.2
     },
 
@@ -191,7 +284,7 @@
       bearing: -18.399999999998954,
       pitch: 60,
 
-      speed: 0.7,
+      speed: 0.4,
       curve: 0.2,
 
     }
@@ -242,19 +335,47 @@
 
   } );
 
-  // On every scroll event, check which element is on screen
-  window.onscroll = function () {
-    var chapterNames = Object.keys( chapters );
-    for ( var i = 0; i < chapterNames.length; i++ ) {
-      var chapterName = chapterNames[ i ];
-      if ( isElementOnScreen( chapterName ) ) {
-        setActiveChapter( chapterName );
-        break;
-      }
-    }
-  };
+  // define the map container element
+  var containerElement = document.getElementById( 'map-container' ),
+      tapToStartElement = document.getElementById('tap_to_start'),
+      tapCollectorElement = document.getElementById('tap_collector'),
+      tapToRestartElement = document.getElementById('tap_to_restart');
 
+  // setup for slide 1
   var activeChapterName = 'chapter1';
+  var activeChapterNumber = 1;
+
+  // listen for a click on the start screen
+  tapToStartElement.addEventListener('click', function( e ) {
+    tapToStartElement.setAttribute('class', 'hidden');
+    tapCollectorElement.setAttribute('class', 'active');
+
+    e.preventDefault();
+  });
+
+  // listen for clicks on screen
+  tapCollectorElement.addEventListener( 'click', function ( e ) {
+    var chapterNames = Object.keys( chapters );
+
+    var chapterName = chapterNames[ activeChapterNumber ];
+    setActiveChapter( chapterName );
+
+    activeChapterNumber++;
+
+    e.preventDefault();
+  } );
+
+  tapToRestartElement.addEventListener('click', function (e) {
+    document.getElementById( activeChapterName ).setAttribute( 'class', '' );
+
+    setActiveChapter( 'chapter1' );
+    // setup for slide 1
+    activeChapterName = 'chapter1';
+    activeChapterNumber = 1;
+
+    tapToRestartElement.setAttribute('class','hidden');
+    e.preventDefault();
+  });
 
 
   function setActiveChapter( chapterName ) {
@@ -323,6 +444,8 @@
         "any",
         [ '==', 'slide', 'slide5' ],
       ] );
+
+      tapToRestartElement.setAttribute('class', 'active');
     }
 
     map.flyTo( chapters[ chapterName ] );
